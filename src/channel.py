@@ -12,18 +12,18 @@ class Channel:
 
     def __init__(self, channel_id: str) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
-        self.channel_id = channel_id
-        self.channel = youtube.channels().list(id=self.channel_id, part='snippet,statistics').execute()
-        self.title = self.channel["items"][0]["snippet"]["title"]
-        self.description = self.channel["items"][0]["snippet"]["description"]
-        self.url = f"https://www.youtube.com/" + self.channel['items'][0]['snippet']['customUrl']
-        self.subscriber_count = self.channel["items"][0]["statistics"]["subscriberCount"]
-        self.video_count = self.channel["items"][0]["statistics"]["videoCount"]
-        self.view_count = self.channel["items"][0]["statistics"]["viewCount"]
+        self.__channel_id = channel_id
+        self.__channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
+        self.title = self.__channel["items"][0]["snippet"]["title"]
+        self.description = self.__channel["items"][0]["snippet"]["description"]
+        self.url = f"https://www.youtube.com/" + self.__channel['items'][0]['snippet']['customUrl']
+        self.subscriber_count = self.__channel["items"][0]["statistics"]["subscriberCount"]
+        self.video_count = self.__channel["items"][0]["statistics"]["videoCount"]
+        self.view_count = self.__channel["items"][0]["statistics"]["viewCount"]
 
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
-        channel = youtube.channels().list(id=self.channel_id, part='snippet,statistics').execute()
+        channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
         print(json.dumps(channel, indent=2, ensure_ascii=False))
 
     @classmethod
@@ -32,14 +32,12 @@ class Channel:
         return build('youtube', 'v3', developerKey=api_key)
 
     def to_json(self, data):
-
         with open(data, 'w', encoding='utf-8') as file:
             """Метод, сохраняющий в файл значения атрибутов экземпляра"""
-            json.dump({'channel_id': self.channel_id,
+            json.dump({'channel_id': self.__channel_id,
                        'title': self.title,
                        'description': self.description,
                        'url': self.url,
                        'subscriberCount': self.subscriber_count,
                        'videoCount': self.video_count,
                        'viewCount': self.view_count}, file, ensure_ascii=False, indent=2)
-
