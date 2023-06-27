@@ -21,6 +21,10 @@ class Channel:
         self.video_count = self.__channel["items"][0]["statistics"]["videoCount"]
         self.view_count = self.__channel["items"][0]["statistics"]["viewCount"]
 
+    @property
+    def channel_id(self):
+        return self.__channel_id
+
     def print_info(self) -> None:
         """Выводит в консоль информацию о канале."""
         channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
